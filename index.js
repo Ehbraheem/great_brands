@@ -42,6 +42,18 @@
       ]);
 
   app.route({
+    path: '/',
+    method: 'GET',
+    handler: async (req, h) => {
+      const response = h.response("Go to /docs to get the documentation on how to use this API")
+      response.type('application/json')
+      response.code(200)
+
+      return response
+    }
+  })
+
+  app.route({
     path: '/users',
     method: 'GET',
     tags: ['users'],
