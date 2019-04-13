@@ -1,5 +1,5 @@
 const { resolve } = require('path')
 
 module.exports = {
-'config': path.resolve('config','config.js')
+'config': resolve('config','config.js')
 }
