@@ -5,6 +5,10 @@
 
 
   const { server } = require('hapi')
+  const Inert = require('inert');
+  const Vision = require('vision');
+  const HapiSwagger = require('hapi-swagger');
+  const Pack = require('./package');
   const db = require('./models/')
   
   const { User, Property, Rent, Session } = db
@@ -14,9 +18,33 @@
 		host: 'localhost'
 	})
 
+  const swaggerOptions = {
+    auth: false,
+    tags: {
+      'users': 'Manage application users',
+      'properties': 'Manages Properties that are available for rent',
+      'rent': 'Manages properties that are rented and not rented',
+    },
+    info: {
+      title: 'Assets management application',
+      description: 'API for managing assets and rents',
+      version: '0.0.1'
+    }
+  }
+
+  await app.register([
+          Inert,
+          Vision,
+          {
+              plugin: HapiSwagger,
+              options: swaggerOptions
+          }
+      ]);
+
   app.route({
     path: '/users',
     method: 'GET',
+    tags: ['users'],
     handler: async (req, h) => {
       const users = await User.findAll()
       const response = h.response({users})
@@ -30,11 +58,12 @@
   app.route({
     path: '/users',
     method: 'POST',
+    tags: ['users'],
     handler: async (req, h) => {
       const user = await User.create(req.payload)
       let response;
       if (user) {
-        response = = h.response({result: 'User successfully created!'})
+        response = h.response({result: 'User successfully created!'})
         response.code(201)
       } else{
         response = h.response({result: 'User creation failed!'})
@@ -48,6 +77,7 @@
   app.route({
     path: '/properties',
     method: 'GET',
+    tags: ['properties'],
     handler: async (req, h) => {
       if (!!(_logedInUser(_currentUser(req)))) {
         const properties = await Property.findAll()
@@ -68,6 +98,7 @@
   app.route({
     path: '/login',
     method: 'POST',
+    tags: ['users'],
     handler: async (req, h) => {
       const payload = req.payload
       const email = payload.replace(/\}\{\)\(\\n\s;:\|\^/g, '') //sanitize
@@ -75,7 +106,7 @@
       let response;
 
       if (user && user.login(payload.password)){
-        response = = h.response({result: 'You have successfully log in'})
+        response = h.response({result: 'You have successfully log in'})
         response.code(200)
         response.header('email', user.email)
       } else {
