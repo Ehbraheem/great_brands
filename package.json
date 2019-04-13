@@ -1,0 +1,14 @@
+{
+  "name": "great-brands",
+  "version": "1.0.0",
+  "description": "Great Brand technical test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bolatan Ibrahim (ehbraheem@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "hapi": "18.1.0"
+  }
+}
