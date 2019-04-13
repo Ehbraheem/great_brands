@@ -5,7 +5,7 @@
 
   module.exports = () => {
     const { NODE_ENV } = process.env
-    
+
     return NODE_ENV === 'production' ?
       new Sequelize(process.env.DATABASE_URL, {
         pool: {
@@ -17,7 +17,7 @@
     })
       : new Sequelize({
               dialect: 'sqlite',
-              storage: `${__dirname}/database.sqlite`
+              storage: `${__dirname}/db/database.sqlite`
             })
   }
 })()
